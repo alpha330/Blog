@@ -7,9 +7,9 @@ WORKDIR /app
 
 COPY requirments.txt /app
 
-RUN pip inatall --upgrade pip
-RUN pip install -r requirments.txt
+RUN pip3 install --upgrade pip
+RUN pip3 install -r requirments.txt
 
 COPY ./core /app
 
-CMD ["python","manage.py","runserver","0.0.0.0:8000"]
+CMD ["python3","manage.py","runserver","0.0.0.0:8000"]
