@@ -7,7 +7,7 @@ WORKDIR /app
 
 COPY requirments.txt /app
 
-RUN pip3 install --upgrade pip
-RUN pip3 install -r requirments.txt
+RUN pip install --upgrade pip
+RUN pip install -r requirments.txt
 
 COPY ./core /app
