@@ -32,10 +32,12 @@ class RedirectToAli(RedirectView):
     
 
 class PostList(ListView):
-    #model = Post
+    model = Post
     #queryset = Post.objects.all()
     context_object_name = 'posts'
+    paginate_by = 2
+    ordering=['-id']
 
-    def get_queryset(self):
-        posts = Post.objects.all()
-        return posts
+    # def get_queryset(self):
+    #     posts = Post.objects.all()
+    #     return posts
