@@ -15,7 +15,7 @@ class Post(models.Model):
     status = models.BooleanField(default=False)
     created_date =models.DateTimeField(auto_now_add=True)
     updated_date =models.DateTimeField(auto_now=True)
-    published_date =models.DateTimeField(auto_now=True)
+    published_date =models.DateTimeField()
 
     def __str__(self):
         return self.title

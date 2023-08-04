@@ -9,7 +9,7 @@
    <p> blogpost </p>
    {% for post in posts %} 
     <div>
-        <h2>{{post.title}}</h2>
+        <a href="{% url 'blog:post-detail' pk=post.id %}"><h2>{{post.title}}</h2></a>
         <p>{{post.content}}</p>
         <h1>{{post.created_date}}</h1>
         <h1>{{post.author}}</h1>

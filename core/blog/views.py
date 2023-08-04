@@ -1,9 +1,12 @@
 from typing import Any, Dict, Optional
 from django.db.models.query import QuerySet
+from django.forms.models import BaseModelForm
+from django.http import HttpResponse
 from django.shortcuts import render,redirect,get_object_or_404
 from django.views.generic.base import TemplateView,RedirectView
-from django.views.generic import ListView
+from django.views.generic import ListView,DetailView,CreateView
 from .models import Post
+from.forms import Postform
 
 # Create your views here.
 
@@ -41,3 +44,26 @@ class PostList(ListView):
     # def get_queryset(self):
     #     posts = Post.objects.all()
     #     return posts
+
+class PostDetailView(DetailView):
+    model = Post
+
+
+# class PostCreateView(FormView):
+#     template_name = 'contact.html'
+#     form_class = Postform
+#     success_url = '/blog/post'
+
+#     def form_valid(self, form):
+#         form.save()
+#         return super().form_valid(form)
+
+class PostCreateView(CreateView):
+    model = Post
+    form_class = Postform
+    #fields = ['author','title','content','category','status','published_date']
+    success_url = '/blog/post'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
