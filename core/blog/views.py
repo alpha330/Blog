@@ -4,9 +4,10 @@ from django.forms.models import BaseModelForm
 from django.http import HttpResponse
 from django.shortcuts import render,redirect,get_object_or_404
 from django.views.generic.base import TemplateView,RedirectView
-from django.views.generic import ListView,DetailView,CreateView
+from django.views.generic import ListView,DetailView,CreateView,UpdateView,DeleteView
 from .models import Post
 from.forms import Postform
+from django.contrib.auth.mixins import LoginRequiredMixin,PermissionRequiredMixin
 
 # Create your views here.
 
@@ -34,7 +35,8 @@ class RedirectToAli(RedirectView):
         return super().get_redirect_url(*args, **kwargs)
     
 
-class PostList(ListView):
+class PostList(PermissionRequiredMixin,LoginRequiredMixin,ListView):
+    permission_required = 'blog.view_post'
     model = Post
     #queryset = Post.objects.all()
     context_object_name = 'posts'
@@ -45,7 +47,7 @@ class PostList(ListView):
     #     posts = Post.objects.all()
     #     return posts
 
-class PostDetailView(DetailView):
+class PostDetailView(LoginRequiredMixin,DetailView):
     model = Post
 
 
@@ -58,7 +60,7 @@ class PostDetailView(DetailView):
 #         form.save()
 #         return super().form_valid(form)
 
-class PostCreateView(CreateView):
+class PostCreateView(LoginRequiredMixin,CreateView):
     model = Post
     form_class = Postform
     #fields = ['author','title','content','category','status','published_date']
@@ -67,3 +69,14 @@ class PostCreateView(CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
+    
+
+class PostEditView(LoginRequiredMixin,UpdateView):
+    model = Post
+    form_class = Postform
+    success_url = '/blog/post'
+
+class DeletePostView(LoginRequiredMixin,DeleteView):
+    model = Post
+    success_url = '/blog/post'
+

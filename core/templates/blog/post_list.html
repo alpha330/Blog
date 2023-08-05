@@ -13,6 +13,12 @@
         <p>{{post.content}}</p>
         <h1>{{post.created_date}}</h1>
         <h1>{{post.author}}</h1>
+        <a href="{% url 'blog:post-edit' pk=post.id %}">
+            <h5>edit</h5>
+        </a>
+        <a href="{% url 'blog:post-delete' pk=post.id %}" color="red">
+            <h5>Delete</h5>
+        </a>
     </div>
    {% endfor %}
    <div class="pagination">
