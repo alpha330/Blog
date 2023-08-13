@@ -1,4 +1,3 @@
-from typing import Any, Dict, Optional
 from django.db.models.query import QuerySet
 from django.forms.models import BaseModelForm
 from django.http import HttpResponse
@@ -8,6 +7,8 @@ from django.views.generic import ListView,DetailView,CreateView,UpdateView,Delet
 from .models import Post
 from.forms import Postform
 from django.contrib.auth.mixins import LoginRequiredMixin,PermissionRequiredMixin
+
+
 
 # Create your views here.
 

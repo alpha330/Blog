@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path,include
 from . import views
 from django.views.generic import TemplateView
 from django.views.generic.base import RedirectView
@@ -16,4 +16,5 @@ urlpatterns = [
     path('post/create',views.PostCreateView.as_view(),name='create-post'),
     path('post/<int:pk>/edit',views.PostEditView.as_view(),name='post-edit'),
     path('post/<int:pk>/delete',views.DeletePostView.as_view(),name='post-delete'),
+    path('api/v1',include('blog.api.v1.urls'),name='api_list_post'),
 ]
