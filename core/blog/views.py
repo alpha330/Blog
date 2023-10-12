@@ -38,15 +38,15 @@ class RedirectToAli(RedirectView):
 
 class PostList(PermissionRequiredMixin,LoginRequiredMixin,ListView):
     permission_required = 'blog.view_post'
-    model = Post
+    # model = Post
     #queryset = Post.objects.all()
     context_object_name = 'posts'
     paginate_by = 2
     ordering=['-id']
 
-    # def get_queryset(self):
-    #     posts = Post.objects.all()
-    #     return posts
+    def get_queryset(self):
+        posts = Post.objects.filter(status=True)
+        return posts
 
 class PostDetailView(LoginRequiredMixin,DetailView):
     model = Post
@@ -63,8 +63,8 @@ class PostDetailView(LoginRequiredMixin,DetailView):
 
 class PostCreateView(LoginRequiredMixin,CreateView):
     model = Post
-    form_class = Postform
-    #fields = ['author','title','content','category','status','published_date']
+    # form_class = Postform
+    fields = ['author','title','content','category','status','published_date']
     success_url = '/blog/post'
 
     def form_valid(self, form):

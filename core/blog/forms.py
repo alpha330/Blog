@@ -6,6 +6,6 @@ class Postform(forms.ModelForm):
     
     class Meta :
         model = Post
-        fields = ['title','content','category','status','published_date']
+        fields = ["author",'title','content','category','status','published_date']
 
     
