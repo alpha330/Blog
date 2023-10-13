@@ -7,11 +7,12 @@ from .serializers import PostSerializer
 
 @api_view()
 def postlist(request):
-    return Response("ok")
+    posts = Post.objects.filter(status=True)
+    serializer = PostSerializer(posts,many=True)
+    return Response(serializer.data)
 @api_view()
 def post_details(request,id):
-    post = Post.objects.get(pk=id)
+    post = get_object_or_404(Post,pk=id,status=True)
     serializer = PostSerializer(post)
-    
     return Response(serializer.data)
     
