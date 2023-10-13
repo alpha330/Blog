@@ -5,11 +5,17 @@ from django.shortcuts import get_object_or_404
 from .serializers import PostSerializer
 # views config to send urls.py
 
-@api_view()
+@api_view(["GET","POST"])
 def postlist(request):
-    posts = Post.objects.filter(status=True)
-    serializer = PostSerializer(posts,many=True)
-    return Response(serializer.data)
+    if request.method == "GET" :
+        posts = Post.objects.filter(status=True)
+        serializer = PostSerializer(posts,many=True)
+        return Response(serializer.data)
+    elif request.method == "POST" :
+        serializer = PostSerializer(data=request.data)
+        serializer.is_valid(raise_exception = True)
+        serializer.save()
+        return Response(serializer.data)
 @api_view()
 def post_details(request,id):
     post = get_object_or_404(Post,pk=id,status=True)
