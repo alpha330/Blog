@@ -108,3 +108,7 @@ class PostViewSet(viewsets.ViewSet):
         serializer.save()
         return Response(serializer.data)
     
+    def delete(self,request,pk):
+        post = get_object_or_404(Post,pk=pk,status=True)
+        post.delete()
+        return Response({"detail":"item removed successfully"},status=status.HTTP_204_NO_CONTENT)
