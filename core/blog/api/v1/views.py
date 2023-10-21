@@ -8,6 +8,7 @@ from rest_framework import viewsets
 from blog.models import Post,Category
 from django.shortcuts import get_object_or_404
 from .serializers import PostSerializer,CategorySerializer
+from .permissions import IsOwnerOrReadOnly
 # views config to send urls.py
 
 # @api_view(["GET","POST"])
@@ -73,17 +74,17 @@ from .serializers import PostSerializer,CategorySerializer
 #         return Response({"detail":"item removed successfully"},status=status.HTTP_204_NO_CONTENT)
         
 class PostList(ListCreateAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated,IsOwnerOrReadOnly]
     serializer_class = PostSerializer
     queryset = Post.objects.filter(status=True)
     
 class PostDetail(RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly]
     serializer_class = PostSerializer
     queryset = Post.objects.filter(status=True)
     
 class PostModelViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated,IsOwnerOrReadOnly]
     serializer_class = PostSerializer
     queryset = Post.objects.filter(status=True)
     
@@ -92,7 +93,7 @@ class PostModelViewSet(viewsets.ModelViewSet):
         return Response({"detail":"OK"})
 
 class CategoryModelViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated,IsOwnerOrReadOnly]
     serializer_class = CategorySerializer
     queryset = Category.objects.all()
     
