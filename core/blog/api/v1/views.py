@@ -9,6 +9,7 @@ from blog.models import Post,Category
 from django.shortcuts import get_object_or_404
 from .serializers import PostSerializer,CategorySerializer
 from .permissions import IsOwnerOrReadOnly
+from django_filters.rest_framework import DjangoFilterBackend
 # views config to send urls.py
 
 # @api_view(["GET","POST"])
@@ -76,17 +77,21 @@ from .permissions import IsOwnerOrReadOnly
 class PostList(ListCreateAPIView):
     permission_classes = [IsAuthenticated,IsOwnerOrReadOnly]
     serializer_class = PostSerializer
+    filter_backends = [DjangoFilterBackend]
     queryset = Post.objects.filter(status=True)
     
 class PostDetail(RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly]
     serializer_class = PostSerializer
+    filter_backends = [DjangoFilterBackend]
     queryset = Post.objects.filter(status=True)
     
 class PostModelViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated,IsOwnerOrReadOnly]
     serializer_class = PostSerializer
     queryset = Post.objects.filter(status=True)
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['author', 'category','status','created_date','updated_date','published_date','status']
     
     @action(methods=["get"],detail=False)
     def get_ok(self,request):
@@ -95,5 +100,7 @@ class PostModelViewSet(viewsets.ModelViewSet):
 class CategoryModelViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated,IsOwnerOrReadOnly]
     serializer_class = CategorySerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['name']
     queryset = Category.objects.all()
     
