@@ -1,15 +1,15 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes,action
 from rest_framework.permissions import IsAuthenticated,IsAuthenticatedOrReadOnly
 from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView
-from rest_framework import viewsets
+from rest_framework import viewsets,filters,status
 from blog.models import Post,Category
 from django.shortcuts import get_object_or_404
 from .serializers import PostSerializer,CategorySerializer
 from .permissions import IsOwnerOrReadOnly
 from django_filters.rest_framework import DjangoFilterBackend
+
 # views config to send urls.py
 
 # @api_view(["GET","POST"])
@@ -77,22 +77,23 @@ from django_filters.rest_framework import DjangoFilterBackend
 class PostList(ListCreateAPIView):
     permission_classes = [IsAuthenticated,IsOwnerOrReadOnly]
     serializer_class = PostSerializer
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend,filters.SearchFilter]
+    filterset_fields = ['author', 'category','status','created_date','updated_date','published_date','status']
     queryset = Post.objects.filter(status=True)
     
 class PostDetail(RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly]
     serializer_class = PostSerializer
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend,filters.SearchFilter]
     queryset = Post.objects.filter(status=True)
     
 class PostModelViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated,IsOwnerOrReadOnly]
     serializer_class = PostSerializer
     queryset = Post.objects.filter(status=True)
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend,filters.SearchFilter]
     filterset_fields = ['author', 'category','status','created_date','updated_date','published_date','status']
-    
+    search_fields = ['content','title']
     @action(methods=["get"],detail=False)
     def get_ok(self,request):
         return Response({"detail":"OK"})
@@ -100,7 +101,9 @@ class PostModelViewSet(viewsets.ModelViewSet):
 class CategoryModelViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated,IsOwnerOrReadOnly]
     serializer_class = CategorySerializer
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend,filters.SearchFilter]
     filterset_fields = ['name']
+    search_fields = ['name']
+    
     queryset = Category.objects.all()
     
