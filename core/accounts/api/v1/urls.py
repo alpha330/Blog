@@ -7,5 +7,16 @@ app_name = "api-v1"
 urlpatterns = [
     # Registration
     path("registration/",views.RegistrationApiView.as_view(),name="registration"),
-    path("token/login/",views.CustomAuthToken.as_view(),name="token-login")
+    
+    
+    # Change Password
+    # Reset Password
+    
+    
+    # Login Token
+    path("token/login/",views.CustomAuthToken.as_view(),name="token-login"),
+    path("token/logout/",views.CustomDiscardAuthToken.as_view(),name="token-logout")
+    
+    # Login JWT
+    
 ]
