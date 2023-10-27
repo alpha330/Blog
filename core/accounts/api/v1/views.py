@@ -2,6 +2,7 @@ from rest_framework import generics,status
 from rest_framework.response import Response
 from accounts.api.v1.serializer import RegistrationSerializer
 
+
 class RegistrationApiView(generics.GenericAPIView):
     
     serializer_class = RegistrationSerializer
