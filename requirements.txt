@@ -3,12 +3,12 @@ django >3.2,<3.3
 python-decouple==3.5
 Pillow==9.0.0
 djangorestframework
-
+coreapi
 
 #Third Party Modules
 markdown  
 django-filter
 drf-yasg[validation]
-
+djangorestframework-simplejwt
 
 #Deployment Modules
