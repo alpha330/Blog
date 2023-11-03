@@ -1,7 +1,6 @@
 from django.urls import path
 from . import views
 from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
     TokenRefreshView,
     TokenVerifyView,
 )
@@ -15,6 +14,8 @@ urlpatterns = [
     
     
     # Change Password
+    path('change-password/',views.ChangePasswordApiView.as_view(),name="change-password"),
+    
     # Reset Password
     
     
