@@ -1,12 +1,10 @@
 from django.urls import path
-from . import views
+from .. import views
 from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView,
 )
 # from rest_framework.authtoken.views import ObtainAuthToken
-
-app_name = "api-v1"
 
 urlpatterns = [
     # Registration
