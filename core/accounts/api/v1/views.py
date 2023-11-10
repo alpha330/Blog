@@ -9,6 +9,7 @@ from accounts.api.v1.serializer import RegistrationSerializer,CustomAuthTokenSer
 from django.contrib.auth import get_user_model
 from accounts.models import Profile
 from django.shortcuts import get_object_or_404
+from django.core.mail import send_mail
 
 User = get_user_model()
 
@@ -83,5 +84,12 @@ class ProfileApiView(generics.RetrieveUpdateAPIView):
 class TestEmailSend(generics.GenericAPIView):
     
     
-    def post(self,request,*args,**kwarg):
+    def get(self,request,*args,**kwarg):
+        send_mail(
+            "Subject here",
+            "Here is the message.",
+            "from@example.com",
+            ["to@example.com"],
+            fail_silently=False,
+        )
         return Response("Email has been Send")
