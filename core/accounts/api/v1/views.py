@@ -79,3 +79,9 @@ class ProfileApiView(generics.RetrieveUpdateAPIView):
         queryset = self.get_queryset()
         obj = get_object_or_404(queryset,user=self.request.user)
         return obj
+    
+class TestEmailSend(generics.GenericAPIView):
+    
+    
+    def post(self,request,*args,**kwarg):
+        return Response("Email has been Send")
