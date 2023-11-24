@@ -1,12 +1,16 @@
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes,action
-from rest_framework.permissions import IsAuthenticated,IsAuthenticatedOrReadOnly
-from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView
-from rest_framework import viewsets,filters,status
-from blog.models import Post,Category
-from django.shortcuts import get_object_or_404
-from .serializers import PostSerializer,CategorySerializer
+from rest_framework.decorators import action
+from rest_framework.permissions import (
+    IsAuthenticated,
+    IsAuthenticatedOrReadOnly,
+)
+from rest_framework.generics import (
+    ListCreateAPIView,
+    RetrieveUpdateDestroyAPIView,
+)
+from rest_framework import viewsets, filters
+from blog.models import Post, Category
+from .serializers import PostSerializer, CategorySerializer
 from .permissions import IsOwnerOrReadOnly
 from .paginations import LargeResultsSetPagination
 from django_filters.rest_framework import DjangoFilterBackend
@@ -26,7 +30,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 #         serializer.is_valid(raise_exception = True)
 #         serializer.save()
 #         return Response(serializer.data)
-    
+
 # class PostList(APIView):
 #     permission_classes = [IsAuthenticated]
 #     serializer_class = PostSerializer
@@ -39,7 +43,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 #         serializer.is_valid(raise_exception = True)
 #         serializer.save()
 #         return Response(serializer.data)
-        
+
 # @api_view(["GET","PUT","DELETE"])
 # @permission_classes([IsAuthenticatedOrReadOnly])
 # def post_details(request,id):
@@ -55,16 +59,16 @@ from django_filters.rest_framework import DjangoFilterBackend
 #     elif request.method == "DELETE":
 #         post.delete()
 #         return Response({"detail":"item removed successfully"},status=status.HTTP_204_NO_CONTENT)
-    
+
 # class PostDetail(APIView):
 #     permission_classes = [IsAuthenticatedOrReadOnly]
 #     serializer_class = PostSerializer
-    
+
 #     def get(self,request,id):
 #         post = get_object_or_404(Post,pk=id,status=True)
 #         serializer = self.serializer_class(post)
 #         return Response(serializer.data)
-    
+
 #     def put(self,request,id):
 #         post = get_object_or_404(Post,pk=id,status=True)
 #         serializer =PostSerializer(post,data=request.data)
@@ -75,40 +79,68 @@ from django_filters.rest_framework import DjangoFilterBackend
 #         post = get_object_or_404(Post,pk=id,status=True)
 #         post.delete()
 #         return Response({"detail":"item removed successfully"},status=status.HTTP_204_NO_CONTENT)
-        
+
+
 class PostList(ListCreateAPIView):
-    permission_classes = [IsAuthenticated,IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
     serializer_class = PostSerializer
-    filter_backends = [DjangoFilterBackend,filters.SearchFilter]
-    filterset_fields = ['author', 'category','status','created_date','updated_date','published_date','status']
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = [
+        "author",
+        "category",
+        "status",
+        "created_date",
+        "updated_date",
+        "published_date",
+        "status",
+    ]
     pagination_class = LargeResultsSetPagination
     queryset = Post.objects.filter(status=True)
-    
+
+
 class PostDetail(RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     serializer_class = PostSerializer
-    filter_backends = [DjangoFilterBackend,filters.SearchFilter]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     queryset = Post.objects.filter(status=True)
-    
+
+
 class PostModelViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated,IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
     serializer_class = PostSerializer
     pagination_class = LargeResultsSetPagination
     queryset = Post.objects.filter(status=True)
-    filter_backends = [DjangoFilterBackend,filters.SearchFilter,filters.OrderingFilter]
-    filterset_fields = ['author', 'category','status','created_date','updated_date','published_date','status']
-    search_fields = ['content','title']
-    ordering_fields = ['id', 'published_date', 'status']
-    @action(methods=["get"],detail=False)
-    def get_ok(self,request):
-        return Response({"detail":"OK"})
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.SearchFilter,
+        filters.OrderingFilter,
+    ]
+    filterset_fields = [
+        "author",
+        "category",
+        "status",
+        "created_date",
+        "updated_date",
+        "published_date",
+        "status",
+    ]
+    search_fields = ["content", "title"]
+    ordering_fields = ["id", "published_date", "status"]
+
+    @action(methods=["get"], detail=False)
+    def get_ok(self, request):
+        return Response({"detail": "OK"})
+
 
 class CategoryModelViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated,IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
     serializer_class = CategorySerializer
-    filter_backends = [DjangoFilterBackend,filters.SearchFilter,filters.OrderingFilter]
-    filterset_fields = ['name']
-    search_fields = ['name']
-    ordering_fields = ['id', 'name']
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.SearchFilter,
+        filters.OrderingFilter,
+    ]
+    filterset_fields = ["name"]
+    search_fields = ["name"]
+    ordering_fields = ["id", "name"]
     queryset = Category.objects.all()
-    
