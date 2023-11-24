@@ -15,13 +15,14 @@ urlpatterns = [
     path("activate/confirm/<str:token>",views.ActivationApiView.as_view(),name="activation"),
     
     # Resend Activation
-     #path("activate/resend")
+    path("activate/resend",views.ReconfirmationApiView.as_view(),name="reactivation"),
     
     # Change Password
     path('change-password/',views.ChangePasswordApiView.as_view(),name="change-password"),
     
     # Reset Password
-    
+    path("send-reset-password-link/",views.ResetLinkPasswordSendApiView.as_view(),name="send-reset-password-link"),
+    path("reset-password/<str:token>",views.ResetPasswordApiView.as_view(),name="reset-password"),
     
     # Login Token
     path("token/login/",views.CustomAuthToken.as_view(),name="token-login"),

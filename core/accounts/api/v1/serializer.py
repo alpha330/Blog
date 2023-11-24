@@ -93,4 +93,58 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = ('id','email','first_name','last_name','image','description','created_date','updated_date')
         read_only_field = ['email']
+
+class ReconfirmationApiSerializer(serializers.Serializer):
+    """
+     This class is used to serialize the User model in order to create a new user instance
+    """
+    email = serializers.EmailField(required=True)
+    def validate(self,attrs):
+        """
+         Validate and authenticate the user.
+        """
+        email = attrs.get("email")
+        try:
+            user_obj = User.objects.get(email=email)
+        except User.DoesNotExist:
+            raise serializers.ValidationError({"detail":"email dose not exist"})
+        if user_obj.is_verified:
+            raise serializers.ValidationError({"detail":"User was verified before"})
+        attrs["user"]=user_obj
+        return super().validate(attrs)
     
+class PasswordResetLinkSerializer(serializers.Serializer):
+    """
+     This class is used to serialize the User model in order to create a new user instance
+    """
+    email = serializers.EmailField(required=True)
+    def validate(self,attrs):
+        """
+         Validate and authenticate the user.
+        """
+        email = attrs.get("email")
+        try:
+            user_obj = User.objects.get(email=email)
+        except User.DoesNotExist:
+            raise serializers.ValidationError({"detail":"email dose not exist"})
+        attrs["user"]=user_obj
+        return super().validate(attrs)
+    
+class ResetPasswordSerializer(serializers.Serializer):
+    """
+     This class is used to serialize the User model in order to create a new user instance
+    """
+    new_password = serializers.CharField(required=True)
+    new_password_1 = serializers.CharField(required=True)
+    
+    def validate(self,attrs):
+        """
+         Validate and authenticate the user.
+        """
+        if attrs.get('new_password') != attrs.get('new_password_1'):
+            raise serializers.ValidationError({'detail':'password dose not match'})
+        try:
+            validate_password(attrs.get('new_password'))
+        except exceptions.ValidationError as e:
+            raise serializers.ValidationError({'new_password':list(e.messages)})         
+        return super().validate(attrs)
