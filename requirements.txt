@@ -18,3 +18,5 @@ djoser
 # refactoring and test
 black
 flake8
+pytest
+pytest-django
