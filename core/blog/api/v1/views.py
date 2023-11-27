@@ -18,6 +18,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 # views config to send urls.py
 
+
 class PostList(ListCreateAPIView):
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
     serializer_class = PostSerializer
