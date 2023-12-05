@@ -10,6 +10,7 @@ markdown
 django-filter
 drf-yasg[validation]
 djangorestframework-simplejwt
+django-cors-headers
 # Email third party modules
 django-mail-templated
 #Deployment Modules
@@ -20,3 +21,4 @@ black
 flake8
 pytest
 pytest-django
+faker

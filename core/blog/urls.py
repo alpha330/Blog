@@ -6,6 +6,7 @@ app_name = "blog"
 urlpatterns = [
     path("cbv-index", views.Indexview.as_view(), name="cbv-index"),
     path("post/", views.PostList.as_view(), name="post_view"),
+    path("post/api-view/", views.PostListApiView.as_view(), name="post_view_api_view"),
     path(
         "go-to-index/<int:pk>",
         views.RedirectToAli.as_view(pattern_name="blog:cbv-index"),

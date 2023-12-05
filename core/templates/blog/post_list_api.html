@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>blog</title>
+</head>
+<body>
+   <p> blogpost </p>
+   <ol id="post-wrapper">
+   <!-- <div>
+        <a href=""><h2></h2></a>
+        <p></p>
+        <h1></h1>
+        <h1></h1>
+        <a href="">
+            <h5>edit</h5>
+        </a>
+        <a href="" color="red">
+            <h5>Delete</h5>
+        </a>
+    </div>
+    -->
+    </ol>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        $.get('/blog/api/v1/post',
+            function (data, textStatus, jqXHR) {  // success callback
+                wrapper = $('#post-wrapper');
+                for (post of data.results){
+                    wrapper.append('<li><a href=" + post.absolute.url + ">' + post.title + '</a></li>');
+                }
+               
+              //alert('status: ' + textStatus + ', data:' + data);
+              //console.log(data);
+            });
+    </script>
+</body>
+</html>
