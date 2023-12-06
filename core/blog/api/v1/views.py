@@ -20,7 +20,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 
 class PostList(ListCreateAPIView):
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [IsOwnerOrReadOnly]
     serializer_class = PostSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = [
@@ -44,7 +44,7 @@ class PostDetail(RetrieveUpdateDestroyAPIView):
 
 
 class PostModelViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [IsOwnerOrReadOnly]
     serializer_class = PostSerializer
     pagination_class = LargeResultsSetPagination
     queryset = Post.objects.filter(status=True)
@@ -71,7 +71,7 @@ class PostModelViewSet(viewsets.ModelViewSet):
 
 
 class CategoryModelViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated]
     serializer_class = CategorySerializer
     filter_backends = [
         DjangoFilterBackend,
