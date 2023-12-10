@@ -26,3 +26,4 @@ faker
 # Background Proccess and Casch
 celery
 Redis
+django-redis
