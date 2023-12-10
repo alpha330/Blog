@@ -30,7 +30,7 @@ DEBUG = config("DEBUG", cast=bool, default=True)
 ALLOWED_HOSTS = config(
     "ALLOWED_HOSTS",
     cast=lambda v: [s.strip() for s in v.split(",")],
-    default="127.0.0.1",
+    default="*",
 )
 
 
@@ -207,3 +207,5 @@ EMAIL_HOST = "smtp4dev"
 EMAIL_HOST_USER = ""
 EMAIL_HOST_PASSWORD = ""
 EMAIL_PORT = 25
+
+CELERY_BROKER_URL = "redis://redis:6379/1"
