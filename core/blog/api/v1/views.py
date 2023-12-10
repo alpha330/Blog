@@ -82,4 +82,3 @@ class CategoryModelViewSet(viewsets.ModelViewSet):
     search_fields = ["name"]
     ordering_fields = ["id", "name"]
     queryset = Category.objects.all()
-    
