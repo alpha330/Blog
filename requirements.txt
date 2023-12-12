@@ -11,10 +11,11 @@ django-filter
 drf-yasg[validation]
 djangorestframework-simplejwt
 django-cors-headers
+djoser
 # Email third party modules
 django-mail-templated
 #Deployment Modules
-djoser
+gunicorn
 
 # refactoring and test
 black
