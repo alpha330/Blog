@@ -1,0 +1,34 @@
+name: Django Project Test And Deploy
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup docker-compose
+      run: docker-compose up -d
+    - name: Run Tests
+      run: docker exec blogbackend sh -c "flake8 && pytest ."
+
+  Deploy:
+    name: Deploy 
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: ssh to vps ubuntu
+      uses: appleboy/ssh-action@master
+      with:
+        username: ${{secret.USERNAME}}
+        password: ${{secret.PASSWORD}}
+        host: ${{secret.HOST}}
+        port: ${{secret.PORT}}
+      
