@@ -29,12 +29,12 @@ jobs:
     - name: ssh to vps ubuntu
       uses: appleboy/ssh-action@master
       with:
-        username: ${{secret.USERNAME}}
-        password: ${{secret.PASSWORD}}
-        host: ${{secret.HOST}}
-        port: ${{secret.PORT}}
+        username: ${{secrets.USERNAME}}
+        password: ${{secrets.PASSWORD}}
+        host: ${{secrets.HOST}}
+        port: ${{secrets.PORT}}
         script: |
-          cd ${{secret.BLOG_PATH}}
+          cd ${{secrets.BLOG_PATH}}
           docker-compose -f docker-compose-stage.yml stop
           git pull
           docker-compose -f docker-compose-stage.yml start
