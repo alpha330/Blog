@@ -34,7 +34,7 @@ jobs:
         host: ${{secrets.HOST}}
         port: ${{secrets.PORT}}
         script: |
-          cd ${{secrets.BLOG_PATH}}
+          cd Blog
           docker-compose -f docker-compose-stage.yml stop
           git pull
           docker-compose -f docker-compose-stage.yml start
