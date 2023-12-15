@@ -8,7 +8,7 @@ on:
 
 jobs:
 
-  build:
+  Tests:
 
     runs-on: ubuntu-latest
 
@@ -20,7 +20,9 @@ jobs:
       run: docker exec blogbackend sh -c "flake8 && pytest ."
 
   Deploy:
+    if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
     name: Deploy 
+    needs: Tests
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -31,4 +33,9 @@ jobs:
         password: ${{secret.PASSWORD}}
         host: ${{secret.HOST}}
         port: ${{secret.PORT}}
+        script: |
+          cd ${{secret.BLOG_PATH}}
+          docker-compose -f docker-compose-stage.yml stop
+          git pull
+          docker-compose -f docker-compose-stage.yml start
       
