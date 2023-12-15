@@ -1,4 +1,5 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
+from django.views import View
 from django.views.generic.base import TemplateView, RedirectView
 from django.views.generic import (
     ListView,
@@ -13,32 +14,28 @@ from django.contrib.auth.mixins import (
     LoginRequiredMixin,
     PermissionRequiredMixin,
 )
+from django.http import Http404
 
 
-class Indexview(TemplateView):
-    template_name = "base.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["name"] = "ali"
-        context["post"] = Post.objects.all()
-        return context
-
-
-class RedirectToAli(RedirectView):
-    url = "https://alimahmoodi.net"
-
-    def get_redirect_url(self, *args, **kwargs):
-        post = get_object_or_404(Post, pk=kwargs["pk"])
-        print(post)
-        return super().get_redirect_url(*args, **kwargs)
-
-
-class PostList(PermissionRequiredMixin, LoginRequiredMixin, ListView):
-    permission_required = "blog.view_post"
+class MyPostsList(LoginRequiredMixin, ListView):
+    #permission_required = "blog.my_post_list"
     context_object_name = "posts"
-    paginate_by = 2
-    ordering = ["-id"]
+    paginate_by = 20
+    template_name = "blog/my_post_list.html"
+    ordering = ["-created_date"]
+    
+    def get_queryset(self):
+        user = self.request.user
+        posts = Post.objects.filter(author__user=user, status=True)
+        return posts
+
+    
+class AllPostsList(LoginRequiredMixin, ListView):
+    #permission_required = "blog.all_post_list"
+    context_object_name = "posts"
+    paginate_by = 20
+    template_name = "blog/all_post_list.html"
+    ordering = ["-created_date"]
 
     def get_queryset(self):
         posts = Post.objects.filter(status=True)
@@ -69,13 +66,26 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 class PostEditView(LoginRequiredMixin, UpdateView):
     model = Post
     form_class = Postform
-    success_url = "/blog/post"
+    success_url = ""
+    
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset=queryset)
+        # بررسی اینکه یوزر لاگین شده با نویسنده پست یکسان است یا نه
+        if obj.author.user != self.request.user:
+            raise Http404("You Do Not Have Permission To Edit This Post")
+        return obj
 
 
 class DeletePostView(LoginRequiredMixin, DeleteView):
     model = Post
-    success_url = "/blog/post"
-
+    success_url = ""
+    
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset=queryset)
+        # بررسی اینکه یوزر لاگین شده با نویسنده پست یکسان است یا نه
+        if obj.author.user != self.request.user:
+            raise Http404("You Do Not Have Permission To Delete This Post")
+        return obj
 
 class PostListApiView(TemplateView):
     template_name = "blog/post_list_api.html"

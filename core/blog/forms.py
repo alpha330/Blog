@@ -1,5 +1,5 @@
 from django import forms
-from .models import Post
+from blog.models import Post, Comments
 
 
 class Postform(forms.ModelForm):
@@ -13,3 +13,9 @@ class Postform(forms.ModelForm):
             "status",
             "published_date",
         ]
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comments
+        fields = ["user", "comment"]
+        
