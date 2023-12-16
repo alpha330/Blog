@@ -42,6 +42,7 @@
             <a href="?page={{ page_obj.next_page_number }}">next</a>
             <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
         {% endif %}
+        <a href="{% url 'accounts:logout' %}" color="red"><h5>LOGOUT</h5></a>
     </span>
 </div>
 </body>

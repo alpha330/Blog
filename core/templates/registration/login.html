@@ -10,10 +10,11 @@
 
 </div class="container py-5">
     <h1>LOGIN</h1>
-    <form method="POST">
+    <form method="POST" url="{% url 'accounts:login' %}">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type='submit'>Log In!</button>
-    </form>  
+        {{form}}
+        <button type="submit">login</button>
+        <button ><a href="{% url 'accounts:register' %}">Register</a></button>
+    </form>
 </body>
 </html>
