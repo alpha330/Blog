@@ -5,6 +5,7 @@ from rest_framework_simplejwt.views import (
 )
 from .. import views
 
+app_name = "api_v1_user"
 # from rest_framework.authtoken.views import ObtainAuthToken
 
 urlpatterns = [

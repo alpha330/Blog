@@ -1,10 +1,10 @@
 from django.contrib.auth.views import LoginView
 from django.views.generic.edit import FormView
-from django.shortcuts import redirect
+from django.shortcuts import redirect,render
 from django.contrib.auth import logout
 from django.contrib.auth import login
 from django.views import View
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy,reverse
 from django.http import JsonResponse
 import requests
 from django.views.decorators.cache import cache_page
@@ -34,17 +34,85 @@ class LoginUser(LoginView):
         """
         return reverse_lazy("blog:all_post_view")
     
-class RegistrationView(FormView):
+class RegistrationFromTemplateView(View):
     template_name = "registration/registration.html"
-    redirect_authenticated_user = True
-    form_class = RegistrationUser
-    success_url = reverse_lazy("blog:all_post_view")
     
-    def form_valid(self, form):
-        user = form.save()
-        if user is not None:
-            login(self.request, user)
-        return super(RegistrationView, self).form_valid(form)
+    
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+    
+    def post(self, request, *args, **kwargs):
+        api_url = reverse_lazy("accounts:api_v1_user:registration")
+        absolute_url = request.build_absolute_uri(api_url)
+        data = {
+            'email': request.POST.get('email'),
+            'password': request.POST.get('password'),
+            'password1': request.POST.get('password1'),
+        }
+
+        response = requests.post(absolute_url, data=data)
+        if response.status_code == 201:
+            return redirect('accounts:login')
+        else:
+            return render(request, self.template_name, {'error': True})
+        
+class ForgetPasswordView(View):
+    template_name = "registration/forget-password.html"
+    
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+    
+    def post(self, request, *args, **kwargs):
+        api_url = reverse_lazy("accounts:api_v1_user:send-reset-password-link")
+        absolute_url = request.build_absolute_uri(api_url)
+        data = {
+            'email': request.POST.get('email'),
+        }
+
+        response = requests.post(absolute_url, data=data)
+        if response.status_code == 200:
+            return reverse_lazy('accounts:login')
+        else:
+            return render(request, self.template_name, {'error': True})
+        
+class ResetPasswordViaLinkView(View):
+    template_name = "registration/reset-password-via-link.html"
+    
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+    
+    def post(self, request, *args, **kwargs):
+        token = kwargs.get('token')
+        api_url = reverse_lazy("accounts:api_v1_user:reset-password", kwargs={"token":token})
+        absolute_url = request.build_absolute_uri(api_url)
+        data = {
+            'new_password': request.POST.get('password'),
+            'new_password_1': request.POST.get('password1'),
+        }
+        response = requests.put(absolute_url, data=data)
+        if response.status_code == 200:
+            return redirect('accounts:login')
+        else:
+            return render(request, self.template_name, {'error': True})
+        
+class VerificationAccountView(View):
+    template_name_success = "registration/account-verified.html"
+    template_name_fail = "registration/account-verified-fail.html"
+
+    def get(self, request, *args, **kwargs):
+        token = kwargs.get('token')
+        api_url = reverse_lazy("accounts:api_v1_user:activation",kwargs={"token":token})
+        absolute_url = request.build_absolute_uri(api_url)
+        response = requests.get(absolute_url)
+        
+        if response.status_code == 200:
+            return render(request, self.template_name_success)
+        else:
+            return render(request, self.template_name_fail)
+        
+        def get(self, request, *args, **kwargs):
+            return HttpResponseNotAllowed(['POST'])
+    
     
 class LogOutView(View):
     def get(self, request):

@@ -5,5 +5,5 @@ User Activation
 {% endblock %}
 
 {% block html %}
-http://127.0.0.1:8000/api/v1activate/confirm/{{token}}
+<p> <a href="{% url 'accounts:verify-account' token %}" ><h2>Activation Link</h2></a></p>
 {% endblock %}
