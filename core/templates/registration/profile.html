@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <style>
+        .avatar-container {
+            width: 240px;
+            height: 240px;
+            overflow: hidden;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .avatar-container img {
+            width: 100%;
+            height: auto;
+            border-radius: 50%;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<div>
+
+</div class="container py-5">
+    <div class="avatar-container">
+        <img src="{{ user_profile.image.url }}" alt="Avatar">
+    </div>
+    <h3> First Name : {{ user_profile.first_name }}</h3>
+    <h3> The Last Name : {{ user_profile.last_name }}</h3>
+    <h3> Description About You :{{ user_profile.description }}</h3>
+    <h3> Created Date :{{ user_profile.created_date }}</h3>
+    <h3> Last Updated Profile :{{ user_profile.updated_date }}</h3>
+    <a href="{% url 'accounts:login' %}"><h2>Back To Login Page</h2></a>
+    <a href="{% url 'accounts:profile-edit-view' pk=request.user.id %}"><h2>Edit Profile</h2></a>
+</body>
+</html>

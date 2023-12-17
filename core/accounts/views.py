@@ -6,8 +6,12 @@ from django.contrib.auth import login
 from django.views import View
 from django.urls import reverse_lazy,reverse
 from django.http import JsonResponse
+import json
+from django.views.generic import DetailView, UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 import requests
 from django.views.decorators.cache import cache_page
+from .models import Profile
 from .forms import RegistrationUser
 # Create your views here.
 
@@ -68,8 +72,7 @@ class ForgetPasswordView(View):
         data = {
             'email': request.POST.get('email'),
         }
-
-        response = requests.post(absolute_url, data=data)
+        response = api_client.post(absolute_url, data=data)
         if response.status_code == 200:
             return reverse_lazy('accounts:login')
         else:
@@ -113,7 +116,30 @@ class VerificationAccountView(View):
         def get(self, request, *args, **kwargs):
             return HttpResponseNotAllowed(['POST'])
     
+class ProfileDetailView(LoginRequiredMixin, DetailView):
+    model = Profile
+    template_name = 'registration/profile.html'
+    context_object_name = 'user_profile'
     
+    def get_object(self, queryset=None):
+        return self.model.objects.get(user=self.request.user)
+    
+class ProfileUpdateView(LoginRequiredMixin, UpdateView):
+    template_name = 'registration/profile-edit.html'
+    model = Profile
+    fields = [ 
+        "first_name", 
+        "last_name",
+        "description",
+        "image",    
+    ] 
+    success_url = reverse_lazy("accounts:profile-view")
+    
+    
+    
+    
+
+   
 class LogOutView(View):
     def get(self, request):
         if request.user.is_authenticated:

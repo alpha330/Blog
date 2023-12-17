@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+</head>
+<body>
+    <form id="profileupdateForm" method="post">
+        {% csrf_token %}
+        <label for="first_name">first name:</label>
+        <input type="name" name="first_name" >
+        <br>
+        <label for="last_name">last name:</label>
+        <input type="name" name="last_name" >
+        <br>
+        <label for="description">Description:</label>
+        <input type="text" name="description" >
+        <br>
+        <label for="image">Avatar:</label>
+        <input type="file" name="image" >
+        <br>
+        <button type="submit" value="Save">Update Profile</button>
+    </form>
+
+    {% if success %}
+        <p style="color: green;">Update successfully</p>
+    {% endif %}
+
+    {% if error %}
+        <p style="color: red;">Update Unsuccessfull</p>
+    {% endif %}
+
+    <script>
+        document.getElementById('profileupdateForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            var form = this;
+            var formData = new FormData(form);
+
+            // ارسال درخواست به ویو Django
+            fetch('', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.text())
+            .then(html => {
+                document.body.innerHTML = html;
+            });
+        });
+    </script>
+</body>
+</html>

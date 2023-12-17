@@ -8,6 +8,8 @@ urlpatterns = [
     path("forget-password/",views.ForgetPasswordView.as_view(), name="forget-password"),
     path("reset-password/<str:token>",views.ResetPasswordViaLinkView.as_view(), name="reset-password-via-link"),
     path("verify-account/<str:token>",views.VerificationAccountView.as_view(), name="verify-account"),
+    path("profile/",views.ProfileDetailView.as_view(), name="profile-view"),
+    path("profile/<str:pk>/edit/",views.ProfileUpdateView.as_view(), name="profile-edit-view"),
     path("logout",views.LogOutView.as_view(), name="logout"),
     path("test/", views.test, name="test"),
     path("api/v1/", include("accounts.api.v1.urls")),

@@ -2,6 +2,8 @@ from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
 from django import forms
 from .models.users import User
+from .models.profile import Profile
+
 
 # Forms For Accounting In Blog 
 
@@ -33,3 +35,8 @@ class RegistrationUser(forms.ModelForm):
             user.save()
         return user
     
+class ProfileForm(forms.ModelForm):
+    
+    class meta:
+        model = Profile
+        fields = ("first_name","last_name","description","image")
