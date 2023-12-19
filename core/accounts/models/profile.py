@@ -8,7 +8,9 @@ class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    image = models.ImageField(blank=True, null=True, upload_to='avatars/',default='avatars/default.jpg')
+    image = models.ImageField(
+        blank=True, null=True, upload_to="avatars/", default="avatars/default.jpg"
+    )
     description = models.TextField()
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateField(auto_now=True)

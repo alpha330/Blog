@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from django.db.models import Count
 from django.urls import reverse
 
 
@@ -19,7 +18,7 @@ class Post(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
     published_date = models.DateTimeField()
-    
+
     def get_comment_count(self):
         return self.comments.count()
 
@@ -31,26 +30,29 @@ class Post(models.Model):
 
     def get_absolute_api_url(self):
         return reverse("blog:api_v1:post-detail", kwargs={"pk": self.pk})
-    
+
+
 # UPDATED PROJECT BLOG COMMENT SECTION IN MODEL APP BLOG
 class Comments(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
-    post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, related_name="comments", on_delete=models.CASCADE)
     image = models.ImageField(null=True, blank=True)
     comment = models.TextField()
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
-    parent = models.ForeignKey('self', related_name='replies', null=True, blank=True, on_delete=models.CASCADE)
+    parent = models.ForeignKey(
+        "self", related_name="replies", null=True, blank=True, on_delete=models.CASCADE
+    )
 
     def is_reply(self):
         return self.parent is not None
-    
+
     class Meta:
-        ordering = ['created_date']
-        
+        ordering = ["created_date"]
+
     def __str__(self):
-        return 'Comment {} by {}'.format(self.comment, self.user)
-        
+        return "Comment {} by {}".format(self.comment, self.user)
+
     def get_comment_count(self):
         return self.comments.count()
 

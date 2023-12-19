@@ -5,15 +5,20 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('blog', '0012_alter_comments_options'),
+        ("blog", "0012_alter_comments_options"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='comments',
-            name='parent',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='replies', to='blog.comments'),
+            model_name="comments",
+            name="parent",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="replies",
+                to="blog.comments",
+            ),
         ),
     ]

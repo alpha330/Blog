@@ -11,11 +11,11 @@ from rest_framework.generics import (
 from rest_framework import viewsets, filters
 from blog.models import Post, Category, Comments
 from .serializers import (
-                          PostSerializer, 
-                          CategorySerializer, 
-                          CommentSerializer, 
-                          ReplySerializer
-                          )
+    PostSerializer,
+    CategorySerializer,
+    CommentSerializer,
+    ReplySerializer,
+)
 from .permissions import IsOwnerOrReadOnly
 from .paginations import LargeResultsSetPagination
 from django_filters.rest_framework import DjangoFilterBackend
@@ -88,6 +88,7 @@ class CategoryModelViewSet(viewsets.ModelViewSet):
     ordering_fields = ["id", "name"]
     queryset = Category.objects.all()
 
+
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comments.objects.all()
     serializer_class = CommentSerializer
@@ -95,7 +96,8 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
-        
+
+
 class ReplyViewSet(viewsets.ModelViewSet):
     queryset = Comments.objects.exclude(parent=None)
     serializer_class = ReplySerializer

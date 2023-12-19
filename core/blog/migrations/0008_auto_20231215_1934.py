@@ -4,44 +4,43 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('blog', '0007_remove_post_unlike'),
+        ("blog", "0007_remove_post_unlike"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='like',
-            name='comment',
+            model_name="like",
+            name="comment",
         ),
         migrations.RemoveField(
-            model_name='like',
-            name='post',
+            model_name="like",
+            name="post",
         ),
         migrations.RemoveField(
-            model_name='like',
-            name='user',
+            model_name="like",
+            name="user",
         ),
         migrations.RemoveField(
-            model_name='comments',
-            name='dislikes',
+            model_name="comments",
+            name="dislikes",
         ),
         migrations.RemoveField(
-            model_name='comments',
-            name='likes',
+            model_name="comments",
+            name="likes",
         ),
         migrations.RemoveField(
-            model_name='post',
-            name='dislikes',
+            model_name="post",
+            name="dislikes",
         ),
         migrations.RemoveField(
-            model_name='post',
-            name='likes',
+            model_name="post",
+            name="likes",
         ),
         migrations.DeleteModel(
-            name='Dislike',
+            name="Dislike",
         ),
         migrations.DeleteModel(
-            name='Like',
+            name="Like",
         ),
     ]
