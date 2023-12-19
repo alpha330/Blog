@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commenting</title>
+</head>
+<body>
+    <h2>Post Details</h2>
+    {% if post.image %}
+        <img src="{{ post.image.url }}" alt="Post Image">
+    {% endif %}
+    <h3>{{ post.title }}</h3>
+    <hr>
+    <p>{{ post.content }}</p>
+    <small>{{ post.author }} - {{ post.published_date }}</small>
+
+    <hr>
+
+    <h2>Comments</h2>
+    {% for comment in comments %}
+        <div>
+            <p>{{ comment.user.email }} said: {{ comment.comment }}</p>
+            {% if comment.image %}
+                <img src="{{ comment.image.url }}" alt="Comment Image">
+            {% endif %}
+            {% for reply in comment.replies.all %}
+            <div class="reply" style="margin-left: 20px;"> 
+              <p class="author">{{ reply.user.email }}:</p>
+              <p class="content">{{ reply.comment }}</p>
+              <!-- Include image if present -->
+              {%if reply.image%}
+                <div class="reply-image">
+                  <img src="{{ reply.image.url }}" alt="Reply image" />
+                </div>
+              {%endif%}
+              <a href="{% url 'blog:delete-comment' pk=comment.pk %}" color="red">
+                <h5>Delete</h5>
+              </a>
+            </div>
+            {% endfor %}
+            <small>{{ comment.created_date }}</small>
+            <form method="post" action="{% url 'blog:add_reply' post_pk=post.pk comment_pk=comment.pk %}">
+                {% csrf_token %}
+            
+                <label for="comments">Comment:</label>
+                <textarea name="comment" ></textarea>
+            
+                <label for="image">Image:</label>
+                <input type="file" name="image">
+            
+                <button type="submit">Submit Replay to Comment</button>
+            </form>
+        </div>
+        <hr>
+    {% endfor %}
+
+    <h2>Add a Comment</h2>
+    <form method="post" action="{% url 'blog:create-comment' pk=post.pk %}">
+        {% csrf_token %}
+    
+        <label for="comments">Comment:</label>
+        <textarea name="comment" ></textarea>
+    
+        <label for="image">Image:</label>
+        <input type="file" name="image">
+    
+        <button type="submit">Submit Comment</button>
+    </form>
+</body>
+</html>

@@ -39,9 +39,21 @@ class Comments(models.Model):
     image = models.ImageField(null=True, blank=True)
     comment = models.TextField()
     created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
+    parent = models.ForeignKey('self', related_name='replies', null=True, blank=True, on_delete=models.CASCADE)
+
+    def is_reply(self):
+        return self.parent is not None
     
+    class Meta:
+        ordering = ['created_date']
+        
+    def __str__(self):
+        return 'Comment {} by {}'.format(self.comment, self.user)
+        
     def get_comment_count(self):
         return self.comments.count()
+
 
 class Category(models.Model):
     name = models.CharField(max_length=255)

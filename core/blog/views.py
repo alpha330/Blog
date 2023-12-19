@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic.base import TemplateView, RedirectView
 from django.views.generic import (
@@ -8,8 +9,8 @@ from django.views.generic import (
     UpdateView,
     DeleteView,
 )
-from .models import Post
-from .forms import Postform
+from .models import Post, Comments
+from .forms import Postform,CommentForm
 from django.contrib.auth.mixins import (
     LoginRequiredMixin,
     PermissionRequiredMixin,
@@ -44,6 +45,20 @@ class AllPostsList(LoginRequiredMixin, ListView):
 
 class PostDetailView(LoginRequiredMixin, DetailView):
     model = Post
+    context_object_name = 'post'
+    template_name = "blog/post_detail_comments.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        post = context['post']
+        comments = Comments.objects.filter(post=post)
+        context['comments'] = comments
+        return context
+
+
+    def get_success_url(self):
+        return self.request.path
+
 
 
 class PostCreateView(LoginRequiredMixin, CreateView):
@@ -89,3 +104,42 @@ class DeletePostView(LoginRequiredMixin, DeleteView):
 
 class PostListApiView(TemplateView):
     template_name = "blog/post_list_api.html"
+
+class CommentCreateView(LoginRequiredMixin, CreateView):
+    model = Comments
+    form_class = CommentForm
+    template_name = 'blog/add_comment.html'
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.instance.post = Post.objects.get(pk=self.kwargs['pk'])
+        form.instance.parent = None  # Assume that we're creating a top-level comment
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('blog:post-detail', kwargs={'pk': self.object.post.pk})
+    
+class ReplyCreateView(LoginRequiredMixin, CreateView):
+    model = Comments
+    form_class = CommentForm
+    template_name = 'blog/add_reply.html'
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.instance.post = Post.objects.get(pk=self.kwargs['post_pk'])
+        form.instance.parent_id = self.kwargs['comment_pk']
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('blog:post-detail', kwargs={'pk': self.object.post.pk})
+    
+class CommentDeleteView(LoginRequiredMixin, DeleteView):
+    model = Comments
+    template_name = 'blog/comment_confirm_delete.html'
+
+    def get_success_url(self):
+        return reverse_lazy('blog:post-detail', kwargs={'pk': self.object.post.pk})
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(user=self.request.user)

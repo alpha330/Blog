@@ -8,7 +8,33 @@
 <body>
     <form method="post">{% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="send message">
+    <input type="submit" value="send message">
     </form>
+    {% if success %}
+        <p style="color: green;">Registration successfully</p>
+    {% endif %}
+
+    {% if error %}
+        <p style="color: red;">Registration Unsuccessfull</p>
+    {% endif %}
+
+    <script>
+        document.getElementById('registrationForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            var form = this;
+            var formData = new FormData(form);
+
+            // ارسال درخواست به ویو Django
+            fetch('', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.text())
+            .then(html => {
+                document.body.innerHTML = html;
+            });
+        });
+    </script>
 </body>
 </html>
