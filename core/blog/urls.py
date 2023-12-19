@@ -8,6 +8,8 @@ urlpatterns = [
     path("post/all-posts", views.AllPostsList.as_view(), name="all_post_view"),
     path("post/api-view/", views.PostListApiView.as_view(), name="post_view_api_view"),
     path("post/<int:pk>", views.PostDetailView.as_view(), name="post-detail"),
+    path("post/<int:pk>/comment", views.CommentCreateView.as_view(), name="create-comment"),
+    path('post/comment/reply/<int:post_pk>/<int:comment_pk>/', views.ReplyCreateView.as_view(), name='add_reply'),
     path("post/create", views.PostCreateView.as_view(), name="create-post"),
     path("post/<int:pk>/edit", views.PostEditView.as_view(), name="post-edit"),
     path(
