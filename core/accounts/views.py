@@ -41,6 +41,7 @@ class LoginUser(LoginView):
 
 class RegistrationFromTemplateView(View):
     template_name = "registration/registration.html"
+    success_url = "/"
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name)
@@ -56,7 +57,7 @@ class RegistrationFromTemplateView(View):
 
         response = requests.post(absolute_url, data=data)
         if response.status_code == 201:
-            return redirect("accounts:login")
+            return redirect("/")
         else:
             return render(request, self.template_name, {"error": True})
 
@@ -84,7 +85,7 @@ class ResetPasswordViaLinkView(View):
     template_name = "registration/reset-password-via-link.html"
 
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name)
+        return reverse_lazy(request, self.template_name)
 
     def post(self, request, *args, **kwargs):
         token = kwargs.get("token")

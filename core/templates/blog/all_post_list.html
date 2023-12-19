@@ -28,6 +28,7 @@
                 <h5>send comment</h5>
             </a>
         {% endif %}
+        
     </div>
    {% endfor %}
    <div class="pagination">
@@ -46,6 +47,12 @@
             <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
         {% endif %}
         <a href="{% url 'accounts:logout' %}" color="red"><h5>LOGOUT</h5></a>
+        <ul class="categories-list">
+            <H3>Categories Posted</H3>
+            {% for category in categories %}
+              <li><a href={% url 'blog:post-detail-by-category' category_name=category.name %}>{{ category.name }}</a></li>
+            {% endfor %}
+        </ul>
     </span>
 </div>
 </body>

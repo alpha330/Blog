@@ -25,6 +25,7 @@
                  <h5>Delete</h5>
              </a>
         {% endif %}
+
     </div>
    {% endfor %}
    <div class="pagination">
@@ -42,6 +43,12 @@
             <a href="?page={{ page_obj.next_page_number }}">next</a>
             <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
         {% endif %}
+        <ul class="categories-list">
+            <H3>Categories Posted</H3>
+            {% for category in categories %}
+              <li><a href={% url 'blog:post-detail-by-category' category_name=category.name %}>{{ category.name }}</a></li>
+            {% endfor %}
+        </ul>
     </span>
 </div>
 </body>
