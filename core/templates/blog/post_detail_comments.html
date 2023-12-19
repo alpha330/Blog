@@ -34,6 +34,9 @@
                   <img src="{{ reply.image.url }}" alt="Reply image" />
                 </div>
               {%endif%}
+              <a href="{% url 'blog:delete-comment' pk=comment.pk %}" color="red">
+                <h5>Delete</h5>
+              </a>
             </div>
             {% endfor %}
             <small>{{ comment.created_date }}</small>

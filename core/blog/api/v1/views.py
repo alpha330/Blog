@@ -9,8 +9,13 @@ from rest_framework.generics import (
     RetrieveUpdateDestroyAPIView,
 )
 from rest_framework import viewsets, filters
-from blog.models import Post, Category
-from .serializers import PostSerializer, CategorySerializer
+from blog.models import Post, Category, Comments
+from .serializers import (
+                          PostSerializer, 
+                          CategorySerializer, 
+                          CommentSerializer, 
+                          ReplySerializer
+                          )
 from .permissions import IsOwnerOrReadOnly
 from .paginations import LargeResultsSetPagination
 from django_filters.rest_framework import DjangoFilterBackend
@@ -82,3 +87,15 @@ class CategoryModelViewSet(viewsets.ModelViewSet):
     search_fields = ["name"]
     ordering_fields = ["id", "name"]
     queryset = Category.objects.all()
+
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comments.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+        
+class ReplyViewSet(viewsets.ModelViewSet):
+    queryset = Comments.objects.exclude(parent=None)
+    serializer_class = ReplySerializer
