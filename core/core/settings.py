@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config("SECRET_KEY", default="test")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 ALLOWED_HOSTS = config(
     "ALLOWED_HOSTS",
     cast=lambda v: [s.strip() for s in v.split(",")],
@@ -201,10 +201,10 @@ SIMPLE_JWT = {
 
 if DEBUG is not True:
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-    EMAIL_USE_TLS = True
+    EMAIL_USE_SSL = True
     EMAIL_HOST = "alimahmoodi.net"
     EMAIL_HOST_USER = "app@alimahmoodi.net"
-    EMAIL_HOST_PASSWORD = "@Aviation84"
+    EMAIL_HOST_PASSWORD = "123qwe!@#"
     EMAIL_PORT = 465
 else:
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"

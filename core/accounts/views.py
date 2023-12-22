@@ -76,9 +76,9 @@ class ForgetPasswordView(View):
         data = {
             "email": request.POST.get("email"),
         }
-        response = request.post(absolute_url, data=data)
+        response = requests.post(absolute_url, data=data)
         if response.status_code == 200:
-            return reverse_lazy("accounts:login")
+            return render(request, self.template_name, {"success": True})
         else:
             return render(request, self.template_name, {"error": True})
 
