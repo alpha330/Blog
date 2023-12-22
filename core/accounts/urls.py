@@ -22,6 +22,7 @@ urlpatterns = [
         name="verify-account",
     ),
     path("profile/", views.ProfileDetailView.as_view(), name="profile-view"),
+    path("changepassword/", views.ChangePasswordView.as_view(), name="change-password"),
     path(
         "profile/<str:pk>/edit/",
         views.ProfileUpdateView.as_view(),

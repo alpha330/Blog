@@ -3,10 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirm Delete The post</title>
+    <title>Confirm Delete The Post</title>
+    <!-- Add your stylesheets, scripts, or any other head elements here -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        p {
+            margin: 10px 0;
+        }
+
+        input {
+            background-color: #dc3545;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        input:hover {
+            background-color: #c82333;
+        }
+
+        /* Add your additional styles here */
+    </style>
 </head>
 <body>
-    <form method="post">{% csrf_token %}
+    <form method="post">
+        {% csrf_token %}
         <p>Are you sure you want to delete "{{ object }}"?</p>
         <input type="submit" value="Confirm">
     </form>

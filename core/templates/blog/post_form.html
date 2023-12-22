@@ -3,38 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit POST</title>
+    <title>Edit Post</title>
+    <!-- Add your stylesheets, scripts, or any other head elements here -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        p {
+            margin: 10px 0;
+        }
+
+        input {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        input:hover {
+            background-color: #0056b3;
+        }
+
+        /* Add your additional styles here */
+    </style>
 </head>
 <body>
-    <form method="post">{% csrf_token %}
+    <form method="post">
+        {% csrf_token %}
         {{ form.as_p }}
-    <input type="submit" value="send message">
+        <input type="submit" value="Update Post">
     </form>
+
     {% if success %}
-        <p style="color: green;">Registration successfully</p>
+        <p style="color: green;">Post updated successfully</p>
     {% endif %}
 
     {% if error %}
-        <p style="color: red;">Registration Unsuccessfull</p>
+        <p style="color: red;">Post update unsuccessful</p>
     {% endif %}
 
-    <script>
-        document.getElementById('registrationForm').addEventListener('submit', function (event) {
-            event.preventDefault();
+    <!-- Add your script for asynchronous form submission here -->
 
-            var form = this;
-            var formData = new FormData(form);
-
-            // ارسال درخواست به ویو Django
-            fetch('', {
-                method: 'POST',
-                body: formData,
-            })
-            .then(response => response.text())
-            .then(html => {
-                document.body.innerHTML = html;
-            });
-        });
-    </script>
 </body>
 </html>

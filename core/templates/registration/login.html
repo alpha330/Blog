@@ -5,18 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
 </head>
-<body>
-<div>
-
-</div class="container py-5">
+<body class="container py-5">
     <h1>LOGIN</h1>
-    <form method="POST" url="{% url 'accounts:login' %}">
+    <form method="POST" action="{% url 'accounts:login' %}">
         {% csrf_token %}
-        {{form}}
-        <button type="submit">login</button>
-        <button ><a href="{% url 'accounts:register' %}">Register</a></button>
-        <button ><a href="{% url 'accounts:forget-password' %}">Forget Password</a></button>
+        {{ form }}
+        <button type="submit">Login</button>
+        <button><a href="{% url 'accounts:register' %}">Register</a></button>
+        <button><a href="{% url 'accounts:forget-password' %}">Forget Password</a></button>
     </form>
 </body>
 </html>
-

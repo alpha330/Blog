@@ -13,6 +13,8 @@ from django.contrib.auth.mixins import (
     LoginRequiredMixin,
 )
 from django.http import Http404
+from accounts.models import Profile
+from django.utils import timezone
 
 
 class MyPostsList(LoginRequiredMixin, ListView):
@@ -82,29 +84,29 @@ class PostDetailView(LoginRequiredMixin, DetailView):
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
+    template_name = "blog/post_create.html"
     fields = [
-        "author",
         "title",
         "content",
         "category",
         "status",
-        "published_date",
+        "image",
     ]
-    success_url = "/blog/post"
-
+    success_url = "/"
     def form_valid(self, form):
-        form.instance.author = self.request.user
+        profile = Profile.objects.get(user=self.request.user)
+        form.instance.author = profile
+        form.instance.published_date = timezone.now()
         return super().form_valid(form)
 
 
 class PostEditView(LoginRequiredMixin, UpdateView):
     model = Post
     form_class = Postform
-    success_url = ""
+    success_url = reverse_lazy("blog:my_post_view")
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset=queryset)
-        # بررسی اینکه یوزر لاگین شده با نویسنده پست یکسان است یا نه
         if obj.author.user != self.request.user:
             raise Http404("You Do Not Have Permission To Edit This Post")
         return obj

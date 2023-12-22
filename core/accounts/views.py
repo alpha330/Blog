@@ -2,13 +2,15 @@ from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect, render
 from django.contrib.auth import logout
 from django.views import View
+from django.contrib import messages
 from django.urls import reverse_lazy
 from django.http import JsonResponse
 from django.views.generic import DetailView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 import requests
 from django.views.decorators.cache import cache_page
-from .models import Profile
+from .models import Profile,User
+from .forms import CustomPasswordChangeForm
 
 # Create your views here.
 
@@ -149,3 +151,35 @@ class LogOutView(View):
             logout(request)
             return redirect("accounts:login")
         return redirect("accounts:login")
+    
+class ChangePasswordView(LoginRequiredMixin, View):
+    template_name = 'registration/password-change.html'
+    form_class = CustomPasswordChangeForm
+    success_url = reverse_lazy('/')
+    
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(user=request.user)
+        return render(request, self.template_name, {'form': form})
+    
+    
+
+    def form_valid(self, form):
+        user = self.request.user
+        old_password = form.cleaned_data['old_password']
+        new_password = form.cleaned_data['new_password1']
+
+        # Check old password
+        if not user.check_password(old_password):
+            messages.error(self.request, 'Old password is incorrect.')
+            return render(self.request, self.template_name, {'form': form})
+
+        # Change the password
+        user.set_password(new_password)
+        user.save()
+
+        messages.success(self.request, 'Password changed successfully.')
+        return redirect(self.success_url)
+
+    def form_invalid(self, form):
+        messages.error(self.request, 'Please enter the information correctly.')
+        return render(self.request, self.template_name, {'form': form})

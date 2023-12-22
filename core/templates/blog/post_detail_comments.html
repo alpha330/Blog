@@ -4,6 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Commenting</title>
+    <!-- Add your stylesheets, scripts, or any other head elements here -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h2, h3, h5 {
+            color: #333;
+        }
+
+        p, small {
+            margin: 10px 0;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        hr {
+            border: 1px solid #ccc;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Add your additional styles here */
+    </style>
 </head>
 <body>
     <h2>Post Details</h2>
@@ -20,6 +67,7 @@
     <h2>Comments</h2>
     {% for comment in comments %}
         <div>
+            <hr>
             <p>{{ comment.user.email }} said: {{ comment.comment }}</p>
             {% if comment.image %}
                 <img src="{{ comment.image.url }}" alt="Comment Image">
@@ -29,12 +77,12 @@
               <p class="author">{{ reply.user.email }}:</p>
               <p class="content">{{ reply.comment }}</p>
               <!-- Include image if present -->
-              {%if reply.image%}
+              {% if reply.image %}
                 <div class="reply-image">
                   <img src="{{ reply.image.url }}" alt="Reply image" />
                 </div>
-              {%endif%}
-              <a href="{% url 'blog:delete-comment' pk=comment.pk %}" color="red">
+              {% endif %}
+              <a href="{% url 'blog:delete-comment' pk=comment.pk %}" style="color: red;">
                 <h5>Delete</h5>
               </a>
             </div>
@@ -44,7 +92,7 @@
                 {% csrf_token %}
             
                 <label for="comments">Comment:</label>
-                <textarea name="comment" ></textarea>
+                <textarea name="comment"></textarea>
             
                 <label for="image">Image:</label>
                 <input type="file" name="image">
@@ -60,7 +108,7 @@
         {% csrf_token %}
     
         <label for="comments">Comment:</label>
-        <textarea name="comment" ></textarea>
+        <textarea name="comment"></textarea>
     
         <label for="image">Image:</label>
         <input type="file" name="image">
