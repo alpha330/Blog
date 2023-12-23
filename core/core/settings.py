@@ -202,7 +202,7 @@ SIMPLE_JWT = {
 # if DEBUG is not True:
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_USE_SSL = True
-EMAIL_HOST = "dgpa.dev"
+EMAIL_HOST = "mail.dgpa.dev"
 EMAIL_HOST_USER = "app@dgpa.dev"
 EMAIL_HOST_PASSWORD = "123qwe!@#"
 EMAIL_PORT = 465
