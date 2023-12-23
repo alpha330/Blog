@@ -13,5 +13,9 @@ router.register("replies", views.ReplyViewSet, basename="reply")
 
 urlpatterns = router.urls
 urlpatterns += [
-    path('api/v1/comments/replies/', views.CommentViewSet.as_view({'get': 'replies'}), name='comment-replies'),
+    path(
+        "api/v1/comments/replies/",
+        views.CommentViewSet.as_view({"get": "replies"}),
+        name="comment-replies",
+    ),
 ]

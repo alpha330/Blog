@@ -58,22 +58,47 @@ class PostSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validate_date):
         return super().update(instance, validate_date)
-    
+
 
 class CommentSerializer(serializers.ModelSerializer):
-   
-    author_email = serializers.ReadOnlyField(source='user.email')
-    author_image = serializers.ImageField(source='user.profile.image', read_only=True)
-    replies_count = serializers.IntegerField(source='replies.count', read_only=True)
-    
-    class Meta:
-        model = Comments
-        fields = ('id', 'post', 'user', 'author_email', 'author_image', 'comment', 'image', 'created_date', 'updated_date', 'replies_count')
-        read_only_fields = ('id', 'user', 'created_date', 'updated_date',)
-        
-class ReplySerializer(serializers.ModelSerializer):
-    author_email = serializers.ReadOnlyField(source='user.email')
+    author_email = serializers.ReadOnlyField(source="user.email")
+    author_image = serializers.ImageField(source="user.profile.image", read_only=True)
+    replies_count = serializers.IntegerField(source="replies.count", read_only=True)
 
     class Meta:
         model = Comments
-        fields = ('id', 'comment', 'user', 'author_email', 'created_date', 'post', 'parent', 'image')
+        fields = (
+            "id",
+            "post",
+            "user",
+            "author_email",
+            "author_image",
+            "comment",
+            "image",
+            "created_date",
+            "updated_date",
+            "replies_count",
+        )
+        read_only_fields = (
+            "id",
+            "user",
+            "created_date",
+            "updated_date",
+        )
+
+
+class ReplySerializer(serializers.ModelSerializer):
+    author_email = serializers.ReadOnlyField(source="user.email")
+
+    class Meta:
+        model = Comments
+        fields = (
+            "id",
+            "comment",
+            "user",
+            "author_email",
+            "created_date",
+            "post",
+            "parent",
+            "image",
+        )

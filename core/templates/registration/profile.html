@@ -19,21 +19,33 @@
             border-radius: 50%;
             display: block;
         }
+
+        a {
+            color: red;
+        }
     </style>
 </head>
 <body>
-<div>
-
-</div class="container py-5">
-    <div class="avatar-container">
-        <img src="{{ user_profile.image.url }}" alt="Avatar">
+    <div class="container py-5">
+        <hr>
+        <div class="avatar-container">
+            <img src="{{ user_profile.image.url }}" alt="Avatar">
+        </div>
+        <hr>
+        <h3>First Name: {{ user_profile.first_name }}</h3>
+        <hr>
+        <h3>Last Name: {{ user_profile.last_name }}</h3>
+        <hr>
+        <h3>Description About You: {{ user_profile.description }}</h3>
+        <hr>
+        <h3>Created Date: {{ user_profile.created_date }}</h3>
+        <hr>
+        <h3>Last Updated Profile: {{ user_profile.updated_date }}</h3>
+        <hr>
+        <a href="{% url 'accounts:login' %}"><h2>Back To My Post List</h2></a>
+        <a href="{% url 'accounts:change-password' %}"><h2>Change Your Password</h2></a>
+        <a href="{% url 'accounts:profile-edit-view' pk=request.user.id %}"><h2>Edit Profile</h2></a>
+        <a href="{% url 'accounts:logout' %}"><h5 style="color: red;">LOGOUT</h5></a>
     </div>
-    <h3> First Name : {{ user_profile.first_name }}</h3>
-    <h3> The Last Name : {{ user_profile.last_name }}</h3>
-    <h3> Description About You :{{ user_profile.description }}</h3>
-    <h3> Created Date :{{ user_profile.created_date }}</h3>
-    <h3> Last Updated Profile :{{ user_profile.updated_date }}</h3>
-    <a href="{% url 'accounts:login' %}"><h2>Back To Login Page</h2></a>
-    <a href="{% url 'accounts:profile-edit-view' pk=request.user.id %}"><h2>Edit Profile</h2></a>
 </body>
 </html>

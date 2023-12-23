@@ -3,46 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>blog</title>
+    <title>Blog</title>
+    <!-- Add your stylesheets, scripts, or any other head elements here -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h2, h4, h5 {
+            color: #333;
+        }
+
+        p {
+            margin: 10px 0;
+        }
+
+        hr {
+            border: 1px solid #ccc;
+        }
+
+        .pagination {
+            margin-top: 20px;
+        }
+
+        .categories-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .categories-list li {
+            margin-bottom: 5px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007BFF;
+        }
+
+        a:hover {
+            color: #0056b3;
+        }
+
+        /* Add your additional styles here */
+    </style>
 </head>
 <body>
-   <p> MY POST LIST </p>
-   <p> <a href="{% url 'blog:all_post_view' %}" ><h2>All Posts</h2></a></p>
-   {% for post in posts %} 
-    <div>
-        <a href="{% url 'blog:post-detail' pk=post.id %}"><h2>{{post.title}}</h2></a>
-        <p>{{post.content}}</p>
-        <h1>{{post.created_date}}</h1>
-        <h1>{{post.author.first_name}} - {{post.author.last_name}}</h1>
-        <p>Likes: {{ post.get_like_count }}</p>
-        <p>Dislikes: {{ post.get_dislike_count }}</p>
-        <p>Comments: {{ post.get_comment_count }}</p>
-        {% if post.author.user == request.user %}
-             <a href="{% url 'blog:post-edit' pk=post.id %}">
-                 <h5>edit</h5>
-             </a>
-             <a href="{% url 'blog:post-delete' pk=post.id %}" color="red">
-                 <h5>Delete</h5>
-             </a>
-        {% endif %}
-    </div>
+
+   <p>You Are In MY POST LIST</p>
+   <h4>Posts Created By <a href="{% url 'accounts:profile-view' %}">{{ request.user }}</a> To Blog</h4>
+   <p><a href="{% url 'blog:all_post_view' %}"><h2>All Posts</h2></a></p>
+   <p><a href="{% url 'blog:post-create' %}"><h5>Create Post</h5></a></p>
+   <hr>
+
+   {% for post in posts %}
+       <hr>
+       <div>
+           <a href="{% url 'blog:post-detail' pk=post.id %}"><h2>{{ post.title }}</h2></a>
+           <p>{{ post.content }}</p>
+           <h1>{{ post.created_date }}</h1>
+           <h1>{{ post.author.first_name }} - {{ post.author.last_name }}</h1>
+           <p>Comments: {{ post.get_comment_count }}</p>
+           {% if post.author.user == request.user %}
+               <a href="{% url 'blog:post-edit' pk=post.id %}">
+                   <h5>Edit</h5>
+               </a>
+               <a href="{% url 'blog:post-delete' pk=post.id %}">
+                   <h5>Delete</h5>
+               </a>
+           {% endif %}
+       </div>
+       <hr>
    {% endfor %}
+
+   <hr>
+
    <div class="pagination">
-    <span class="step-links">
-        {% if page_obj.has_previous %}
-            <a href="?page=1">&laquo; first</a>
-            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-        {% endif %}
+       <span class="step-links">
+           {% if page_obj.has_previous %}
+               <a href="?page=1">&laquo; first</a>
+               <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+           {% endif %}
 
-        <span class="current">
-            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-        </span>
+           <span class="current">
+               Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+           </span>
 
-        {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}">next</a>
-            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-        {% endif %}
-    </span>
-</div>
+           {% if page_obj.has_next %}
+               <a href="?page={{ page_obj.next_page_number }}">next</a>
+               <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+           {% endif %}
+       </span>
+
+       <hr>
+
+       <ul class="categories-list">
+           <h3>Categories Posted</h3>
+           {% for category in categories %}
+               <li><a href="{% url 'blog:post-detail-by-category' category_name=category.name %}">{{ category.name }}</a></li>
+           {% endfor %}
+       </ul>
+
+       <hr>
+
+       <a href="{% url 'accounts:logout' %}"><h5>LOGOUT</h5></a>
+   </div>
 </body>
 </html>

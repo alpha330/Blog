@@ -199,13 +199,20 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
 
-# EMAIL BACKEND CONFIG
+# if DEBUG is not True:
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_USE_TLS = False
-EMAIL_HOST = "smtp4dev"
-EMAIL_HOST_USER = ""
-EMAIL_HOST_PASSWORD = ""
-EMAIL_PORT = 25
+EMAIL_USE_SSL = True
+EMAIL_HOST = "dgpa.dev"
+EMAIL_HOST_USER = "app@dgpa.dev"
+EMAIL_HOST_PASSWORD = "123qwe!@#"
+EMAIL_PORT = 465
+# else:
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# EMAIL_USE_TLS = False
+# EMAIL_HOST = "smtp4dev"
+# EMAIL_HOST_USER = ""
+# EMAIL_HOST_PASSWORD = ""
+# EMAIL_PORT = 25
 
 CELERY_BROKER_URL = "redis://redis:6379/1"
 
@@ -215,9 +222,9 @@ CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": "redis://redis:6379/2",
-        "TIMEOUT":"60",
+        "TIMEOUT": "60",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
+        },
     }
 }

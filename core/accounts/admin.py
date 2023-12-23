@@ -59,11 +59,11 @@ class CustomeUserAdmin(UserAdmin):
         ),
     )
 
+
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ("user", "first_name", "last_name", "created_date", "created_date")
     list_filter = ("first_name", "last_name", "user")
-    
-    
+
 
 admin.site.register(User, CustomeUserAdmin)
 admin.site.register(Profile, ProfileAdmin)

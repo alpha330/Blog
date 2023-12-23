@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post, Category,Comments
+from .models import Post, Category, Comments
 
 # Register your models here.
 
@@ -20,7 +20,7 @@ class PostAdmin(admin.ModelAdmin):
         "created_date",
         "published_date",
     ]
-    
+
 
 class CommentsAdmin(admin.ModelAdmin):
     list_display = [
@@ -28,7 +28,7 @@ class CommentsAdmin(admin.ModelAdmin):
         "post",
         "created_date",
         "updated_date",
-        "parent", 
+        "parent",
     ]
     list_filter = [
         "user",
@@ -38,11 +38,12 @@ class CommentsAdmin(admin.ModelAdmin):
         "parent",
     ]
 
+
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ["name"]
     list_filter = ["name"]
 
+
 admin.site.register(Post, PostAdmin)
 admin.site.register(Comments, CommentsAdmin)
-admin.site.register(Category,CategoryAdmin)
-
+admin.site.register(Category, CategoryAdmin)

@@ -4,11 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            max-width: 500px;
+            margin: 20px auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
+
+    <h1>Registration</h1>
     <form id="registrationForm" method="post">
         {% csrf_token %}
-        <label for="email">EMAIL:</label>
+        <label for="email">Email:</label>
         <input type="email" name="email" required>
         <br>
         <label for="password">Password:</label>
@@ -21,11 +64,11 @@
     </form>
 
     {% if success %}
-        <p style="color: green;">Registration successfully</p>
+        <p style="color: green;">Registration successful</p>
     {% endif %}
 
     {% if error %}
-        <p style="color: red;">Registration Unsuccessfull</p>
+        <p style="color: red;">Registration Unsuccessful</p>
     {% endif %}
 
     <script>
@@ -35,7 +78,7 @@
             var form = this;
             var formData = new FormData(form);
 
-            // ارسال درخواست به ویو Django
+            // Send request to Django view
             fetch('', {
                 method: 'POST',
                 body: formData,

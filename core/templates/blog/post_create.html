@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create a New Post</title>
+    <!-- Add your stylesheets, scripts, or any other head elements here -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        .post-form {
+            max-width: 500px;
+            margin: 20px auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+  <h2>Create a New Post</h2>
+  <form method="post" class="post-form">
+    {% csrf_token %}
+
+    <input type="hidden" name="author" value="{{ request.user.profile.user }}">
+    
+    <label for="{{ form.title.id_for_label }}">Title:</label>
+    {{ form.title }}
+    
+    <label for="{{ form.content.id_for_label }}">Content:</label>
+    {{ form.content }}
+    
+    <label for="{{ form.category.id_for_label }}">Category:</label>
+    {{ form.category }}
+    
+    <label for="{{ form.status.id_for_label }}">Status:</label>
+    {{ form.status }}
+    
+    <label for="{{ form.published_date.id_for_label }}">Published Date:</label>
+    {{ form.published_date }}
+    
+    <label for="{{ form.image.id_for_label }}">Image:</label>
+    {{ form.image }}
+    
+    <button type="submit">Save</button>
+  </form>
+
+  <!-- Add your additional content, scripts, or closing body/html tags here -->
+
+</body>
+</html>

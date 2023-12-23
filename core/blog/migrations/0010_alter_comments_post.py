@@ -5,15 +5,16 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('blog', '0009_comments_updated_date'),
+        ("blog", "0009_comments_updated_date"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='comments',
-            name='post',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='blog.post'),
+            model_name="comments",
+            name="post",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="blog.post"
+            ),
         ),
     ]
