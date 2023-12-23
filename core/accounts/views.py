@@ -10,7 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 import requests
 from django.views.decorators.cache import cache_page
 from .models import Profile,User
-from .forms import CustomPasswordChangeForm
+from .forms import ChangePasswordForm
 
 # Create your views here.
 
@@ -152,34 +152,30 @@ class LogOutView(View):
             return redirect("accounts:login")
         return redirect("accounts:login")
     
-class ChangePasswordView(LoginRequiredMixin, View):
+class ChangePasswordView(LoginRequiredMixin, UpdateView):
     template_name = 'registration/password-change.html'
-    form_class = CustomPasswordChangeForm
-    success_url = reverse_lazy('/')
-    
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(user=request.user)
-        return render(request, self.template_name, {'form': form})
-    
-    
+    form_class = ChangePasswordForm
+    model = User
+    success_url = reverse_lazy("accounts:profile-view")
 
+    def get_object(self, queryset=None):
+        return self.request.user
+    
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.pop('instance', None)
+        kwargs['user'] = self.request.user
+        return kwargs
+    
     def form_valid(self, form):
-        user = self.request.user
-        old_password = form.cleaned_data['old_password']
-        new_password = form.cleaned_data['new_password1']
-
-        # Check old password
-        if not user.check_password(old_password):
-            messages.error(self.request, 'Old password is incorrect.')
-            return render(self.request, self.template_name, {'form': form})
-
-        # Change the password
-        user.set_password(new_password)
-        user.save()
-
-        messages.success(self.request, 'Password changed successfully.')
-        return redirect(self.success_url)
+        messages.success(self.request, 'Password successfully changed.')
+        return super().form_valid(form)
 
     def form_invalid(self, form):
-        messages.error(self.request, 'Please enter the information correctly.')
-        return render(self.request, self.template_name, {'form': form})
+        messages.error(self.request, 'Password change failed. Please correct the errors.')
+        return super().form_invalid(form)
+
+    def get(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        return render(request, self.template_name, {'form': form})
