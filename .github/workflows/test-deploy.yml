@@ -19,23 +19,23 @@ jobs:
     - name: Run Tests
       run: docker exec blogbackend sh -c "flake8 && pytest ."
 
-  # Deploy:
-  #   if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
-  #   name: Deploy 
-  #   needs: Tests
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@v3
-  #   - name: ssh to vps ubuntu
-  #     uses: appleboy/ssh-action@master
-  #     with:
-  #       username: ${{secrets.USERNAME}}
-  #       password: ${{secrets.PASSWORD}}
-  #       host: ${{secrets.HOST}}
-  #       port: ${{secrets.PORT}}
-  #       script: |
-  #         cd ${{secrets.PATH_BLOG}}
-  #         docker-compose -f docker-compose-stage.yml stop
-  #         git pull
-  #         docker-compose -f docker-compose-stage.yml start
+  Deploy:
+    if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
+    name: Deploy 
+    needs: Tests
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: ssh to vps ubuntu
+      uses: appleboy/ssh-action@master
+      with:
+        username: ${{secrets.USERNAME}}
+        password: ${{secrets.PASSWORD}}
+        host: ${{secrets.HOST}}
+        port: ${{secrets.PORT}}
+        script: |
+          cd ${{secrets.PATH_BLOG}}
+          docker-compose -f docker-compose-stage.yml stop
+          git pull
+          docker-compose -f docker-compose-stage.yml start
       
