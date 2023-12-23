@@ -23,10 +23,10 @@ class MyPostsList(LoginRequiredMixin, ListView):
     paginate_by = 20
     template_name = "blog/my_post_list.html"
     ordering = ["-created_date"]
-    
+
     def get_context_data(self, **kwargs):
         context = super(MyPostsList, self).get_context_data(**kwargs)
-        context['categories'] = Category.objects.all()
+        context["categories"] = Category.objects.all()
         return context
 
     def get_queryset(self):
@@ -45,12 +45,13 @@ class AllPostsList(LoginRequiredMixin, ListView):
     def get_queryset(self):
         posts = Post.objects.filter(status=True)
         return posts
-    
+
     def get_context_data(self, **kwargs):
         context = super(AllPostsList, self).get_context_data(**kwargs)
-        context['categories'] = Category.objects.all()
+        context["categories"] = Category.objects.all()
         return context
-    
+
+
 class FilterByCategoryPostsList(LoginRequiredMixin, ListView):
     # permission_required = "blog.all_post_list"
     context_object_name = "posts"
@@ -59,7 +60,7 @@ class FilterByCategoryPostsList(LoginRequiredMixin, ListView):
     ordering = ["-created_date"]
 
     def get_queryset(self):
-        category_name = self.kwargs.get('category_name')
+        category_name = self.kwargs.get("category_name")
         posts = Post.objects.filter(status=True)
         if category_name:
             posts = posts.filter(category__name=category_name)
@@ -93,6 +94,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         "image",
     ]
     success_url = "/"
+
     def form_valid(self, form):
         profile = Profile.objects.get(user=self.request.user)
         form.instance.author = profile

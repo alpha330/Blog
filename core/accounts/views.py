@@ -9,7 +9,7 @@ from django.views.generic import DetailView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 import requests
 from django.views.decorators.cache import cache_page
-from .models import Profile,User
+from .models import Profile, User
 from .forms import ChangePasswordForm
 
 # Create your views here.
@@ -151,31 +151,34 @@ class LogOutView(View):
             logout(request)
             return redirect("accounts:login")
         return redirect("accounts:login")
-    
+
+
 class ChangePasswordView(LoginRequiredMixin, UpdateView):
-    template_name = 'registration/password-change.html'
+    template_name = "registration/password-change.html"
     form_class = ChangePasswordForm
     model = User
     success_url = reverse_lazy("accounts:profile-view")
 
     def get_object(self, queryset=None):
         return self.request.user
-    
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs.pop('instance', None)
-        kwargs['user'] = self.request.user
+        kwargs.pop("instance", None)
+        kwargs["user"] = self.request.user
         return kwargs
-    
+
     def form_valid(self, form):
-        messages.success(self.request, 'Password successfully changed.')
+        messages.success(self.request, "Password successfully changed.")
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        messages.error(self.request, 'Password change failed. Please correct the errors.')
+        messages.error(
+            self.request, "Password change failed. Please correct the errors."
+        )
         return super().form_invalid(form)
 
     def get(self, request, *args, **kwargs):
         form_class = self.get_form_class()
         form = self.get_form(form_class)
-        return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name, {"form": form})

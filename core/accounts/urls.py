@@ -26,7 +26,7 @@ urlpatterns = [
     path(
         "profile/<str:pk>/edit/",
         views.ProfileUpdateView.as_view(),
-        name="profile-edit-view", 
+        name="profile-edit-view",
     ),
     path("logout", views.LogOutView.as_view(), name="logout"),
     path("test/", views.test, name="test"),

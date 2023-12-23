@@ -3,7 +3,6 @@ from django import forms
 from .models.users import User
 from .models.profile import Profile
 from django.contrib.auth.forms import PasswordChangeForm
-from django.utils.translation import ugettext_lazy as _
 
 
 # Forms For Accounting In Blog
@@ -43,18 +42,23 @@ class ProfileForm(forms.ModelForm):
     class meta:
         model = Profile
         fields = ("first_name", "last_name", "description", "image")
-        
+
+
 class ChangePasswordForm(PasswordChangeForm):
     class Meta:
         model = User  # Replace with the actual User model
-        fields = ['old_password', 'new_password1', 'new_password2']
+        fields = ["old_password", "new_password1", "new_password2"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         # Customize the form if needed
-        self.fields['old_password'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Old Password'})
-        self.fields['new_password1'].widget.attrs.update({'class': 'form-control', 'placeholder': 'New Password'})
-        self.fields['new_password2'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Confirm New Password'})
-    
-    
+        self.fields["old_password"].widget.attrs.update(
+            {"class": "form-control", "placeholder": "Old Password"}
+        )
+        self.fields["new_password1"].widget.attrs.update(
+            {"class": "form-control", "placeholder": "New Password"}
+        )
+        self.fields["new_password2"].widget.attrs.update(
+            {"class": "form-control", "placeholder": "Confirm New Password"}
+        )
